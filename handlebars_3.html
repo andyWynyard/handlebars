@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Handlebars_3</title>
+  <script src="handlebars-v4.0.10.js"></script>
+</head>
+
+<body>
+
+  <div id="contentDiv"></div>
+
+  <script id="the-template" type="text/x-handlebars-template">
+    {{#makeRadio "size"}} Small Medium Large {{/makeRadio}} <br /> {{#areEqual 1 2}} Numbers are Equal {{else}} Numbers are not Equal {{/areEqual}} <br /> {{#if "isActive"}}
+    <img src="ntt-logo.png" alt="Active" /> {{else}}
+    <img src="ntt-logo-horz.png" alt="Active" /> {{/if}}
+    <br />
+  </script>
+
+  <script type="text/javascript">
+    var templateInfo = document.getElementById("the-template").innerHTML;
+
+    var template = Handlebars.compile(templateInfo);
+
+    Handlebars.registerHelper("makeRadio", function(name, options) {
+      var radioList = options.fn();
+
+      radioList = radioList.trim().split(" ");
+
+      var output = "";
+
+      for (var val in radioList) {
+        var item = radioList[val].trim();
+        output += '<input type="radio" name="' + name + '"value"' + item + '">' + item + '<br />';
+      }
+      return output;
+    });
+
+    Handlebars.registerHelper("areEqual", function(num1, num2, options) {
+      if (num1 === num2) {
+        return options.fn(this);
+      } else {
+        return options.inverse(this);
+      }
+    });
+
+    Handlebars.registerHelper("if", function(data, options) {
+      if (data === "isActive") {
+        return options.fn(this);
+      } else {
+        return options.inverse(this);
+      }
+    });
+
+    var templateData = template({});
+
+    document.getElementById("contentDiv").innerHTML += templateData;
+  </script>
+
+</body>
+
+</html>
